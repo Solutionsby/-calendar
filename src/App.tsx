@@ -1,10 +1,10 @@
 import "./App.css";
-import { Schelduer } from "./components/schelduer/Schelduer";
+import { SchelduerComponent } from "./components/schelduer/Schelduer";
 
 function App() {
 	return (
 		<>
-			<Schelduer />
+			<SchelduerComponent />
 		</>
 	);
 }
