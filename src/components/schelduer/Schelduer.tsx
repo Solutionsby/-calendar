@@ -10,6 +10,8 @@ import {
 	Toolbar,
 	ViewSwitcher,
 	Appointments,
+	DateNavigator,
+	TodayButton,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import firebase from "firebase/compat/app";
 
@@ -74,6 +76,8 @@ export const SchelduerComponent: React.FC = () => {
 				<WeekView startDayHour={9} endDayHour={19} displayName="Tydzień" />
 				<MonthView displayName="Miesiąc" />
 				<Toolbar />
+				<DateNavigator />
+				<TodayButton />
 				<ViewSwitcher />
 				<Appointments />
 			</Scheduler>
