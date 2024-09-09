@@ -27,7 +27,6 @@ import {
 	AppointmentForm,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import firebase from "firebase/compat/app";
-import { AppointmentComponent } from "../appoitments/appoitments";
 
 interface AppointmentData {
 	id: string;
@@ -89,7 +88,13 @@ export const SchelduerComponent: React.FC = () => {
 			case !!changes.changed:
 				const entries = Object.entries(changes.changed);
 				for (const [id, updatedData] of entries) {
-					updateEventInFirestore({ id, ...updatedData } as Data);
+					if (
+						typeof id === "string" &&
+						typeof updatedData === "object" &&
+						updatedData !== null
+					) {
+						updateEventInFirestore({ id, ...updatedData } as Data);
+					}
 				}
 				break;
 
