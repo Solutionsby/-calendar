@@ -1,7 +1,18 @@
 import { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import {
+	collection,
+	getDocs,
+	deleteDoc,
+	updateDoc,
+	doc,
+	addDoc,
+} from "firebase/firestore";
 import { db } from "../utilities/firebaseConfig";
-import { ViewState } from "@devexpress/dx-react-scheduler";
+import {
+	EditingState,
+	ViewState,
+	IntegratedEditing,
+} from "@devexpress/dx-react-scheduler";
 import {
 	Scheduler,
 	DayView,
@@ -9,17 +20,21 @@ import {
 	MonthView,
 	Toolbar,
 	ViewSwitcher,
-	Appointments,
 	DateNavigator,
 	TodayButton,
+	AppointmentTooltip,
+	Appointments,
+	AppointmentForm,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import firebase from "firebase/compat/app";
+import { AppointmentComponent } from "../appoitments/appoitments";
 
 interface AppointmentData {
 	id: string;
 	title: string;
 	startDate: firebase.firestore.Timestamp;
 	endDate: firebase.firestore.Timestamp;
+	notes: string;
 }
 
 interface ConvertedAppointment {
@@ -27,6 +42,19 @@ interface ConvertedAppointment {
 	title: string;
 	startDate: Date;
 	endDate: Date;
+	notes: string;
+}
+interface SchedulerChanges {
+	deleted?: string | number; // Zakładamy, że id usuwanego wydarzenia to string
+	added?: any; // Możesz dodać inne typy, jak edytowanie, np. added, changed
+	changed?: any;
+}
+interface Data {
+	id: string;
+	title: string;
+	startDate: string;
+	endDate: string;
+	notes: string;
 }
 
 export const SchelduerComponent: React.FC = () => {
@@ -49,9 +77,65 @@ export const SchelduerComponent: React.FC = () => {
 		}
 	};
 
+	const handleSchedulerChange = (changes: SchedulerChanges) => {
+		switch (true) {
+			case !!changes.deleted:
+				deleteEventFromFirestore(changes.deleted as string);
+				break;
+
+			case !!changes.added:
+				addDataToFirestore(changes.added);
+				break;
+			case !!changes.changed:
+				const entries = Object.entries(changes.changed);
+				for (const [id, updatedData] of entries) {
+					updateEventInFirestore({ id, ...updatedData } as Data);
+				}
+				break;
+
+			default:
+				console.log("Nieznana akcja:", changes);
+				break;
+		}
+	};
+	const deleteEventFromFirestore = async (id: string): Promise<void> => {
+		try {
+			const dataRef = doc(db, "appointments", id);
+			await deleteDoc(dataRef);
+			console.log(`Wydarzenie z id ${id} zostało usunięte.`);
+			fetchEvents();
+		} catch (error) {
+			console.error("Błąd podczas usuwania wydarzenia: ", error);
+		}
+	};
+
+	const addDataToFirestore = async (data: Data): Promise<void> => {
+		try {
+			const appoimentsCollection = collection(db, "appointments");
+			await addDoc(appoimentsCollection, data);
+			console.log("Nowe wydarzenie zostało dodane", data);
+			fetchEvents();
+		} catch (error) {
+			console.error("Błąd podczas dodawania wydarzenia: ", error);
+		}
+	};
+	const updateEventInFirestore = async (data: Data): Promise<void> => {
+		try {
+			const dataRef = doc(db, "appointments", data.id);
+			console.log(data.id);
+			console.log(data);
+			await updateDoc(dataRef, { ...data });
+			console.log("wydarzenie zostal zaktualizowane");
+			fetchEvents();
+		} catch (error) {
+			console.log("Blad wydarzenia ", error);
+		}
+	};
+
 	useEffect(() => {
 		fetchEvents();
 	}, []);
+
 	useEffect(() => {
 		if (data.length > 0) {
 			dataDecoder(data);
@@ -59,19 +143,23 @@ export const SchelduerComponent: React.FC = () => {
 	}, [data]);
 
 	const dataDecoder = (data: AppointmentData[]) => {
-		const converted = data.map(({ id, title, startDate, endDate }) => ({
+		const converted = data.map(({ id, title, startDate, endDate, notes }) => ({
 			id,
 			title,
 			startDate: startDate.toDate(),
 			endDate: endDate.toDate(),
+			notes,
 		}));
 
 		setConvertedData(converted);
 	};
+
 	return (
 		<>
 			<Scheduler locale={"pl-PL"} height={600} data={convertedData}>
 				<ViewState defaultCurrentDate={today} defaultCurrentViewName="Week" />
+				<EditingState onCommitChanges={handleSchedulerChange} />
+				<IntegratedEditing />
 				<DayView startDayHour={8} endDayHour={18} displayName="Dzień" />
 				<WeekView startDayHour={9} endDayHour={19} displayName="Tydzień" />
 				<MonthView displayName="Miesiąc" />
@@ -80,6 +168,12 @@ export const SchelduerComponent: React.FC = () => {
 				<TodayButton />
 				<ViewSwitcher />
 				<Appointments />
+				<AppointmentTooltip
+					showCloseButton={true}
+					showDeleteButton={true}
+					showOpenButton={true}
+				/>
+				<AppointmentForm />
 			</Scheduler>
 		</>
 	);
