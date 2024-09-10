@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { AppContext } from "../Context.tsx/appContext";
 import {
 	collection,
 	getDocs,
@@ -7,6 +8,7 @@ import {
 	doc,
 	addDoc,
 } from "firebase/firestore";
+
 import { db } from "../utilities/firebaseConfig";
 import {
 	EditingState,
@@ -44,8 +46,8 @@ interface ConvertedAppointment {
 	notes: string;
 }
 interface SchedulerChanges {
-	deleted?: string | number; // Zakładamy, że id usuwanego wydarzenia to string
-	added?: any; // Możesz dodać inne typy, jak edytowanie, np. added, changed
+	deleted?: string | number;
+	added?: any;
 	changed?: any;
 }
 interface Data {
@@ -57,24 +59,29 @@ interface Data {
 }
 
 export const SchelduerComponent: React.FC = () => {
-	const [data, setData] = useState<AppointmentData[]>([]);
+	// const [data, setData] = useState<AppointmentData[]>([]);
 	const [convertedData, setConvertedData] = useState<ConvertedAppointment[]>(
 		[]
 	);
 	const today = new Date();
 
-	const fetchEvents = async () => {
-		try {
-			const querySnapshot = await getDocs(collection(db, "appointments")); // Pobiera kolekcję 'events'
-			const fetchedEvents: AppointmentData[] = [];
-			querySnapshot.forEach((doc) => {
-				fetchedEvents.push({ id: doc.id, ...doc.data() } as AppointmentData);
-			});
-			setData(fetchedEvents);
-		} catch (error) {
-			console.error("Error fetching events: ", error);
-		}
-	};
+	const context = useContext(AppContext);
+	const { appointments } = context;
+
+	console.log(appointments);
+
+	// const fetchEvents = async () => {
+	// 	try {
+	// 		const querySnapshot = await getDocs(collection(db, "appointments")); // Pobiera kolekcję 'events'
+	// 		const fetchedEvents: AppointmentData[] = [];
+	// 		querySnapshot.forEach((doc) => {
+	// 			fetchedEvents.push({ id: doc.id, ...doc.data() } as AppointmentData);
+	// 		});
+	// 		setData(fetchedEvents);
+	// 	} catch (error) {
+	// 		console.error("Error fetching events: ", error);
+	// 	}
+	// };
 
 	const handleSchedulerChange = (changes: SchedulerChanges) => {
 		switch (true) {
@@ -138,14 +145,10 @@ export const SchelduerComponent: React.FC = () => {
 	};
 
 	useEffect(() => {
-		fetchEvents();
-	}, []);
-
-	useEffect(() => {
-		if (data.length > 0) {
-			dataDecoder(data);
+		if (appointments.length > 0) {
+			dataDecoder(appointments);
 		}
-	}, [data]);
+	}, [appointments]);
 
 	const dataDecoder = (data: AppointmentData[]) => {
 		const converted = data.map(({ id, title, startDate, endDate, notes }) => ({
@@ -173,11 +176,7 @@ export const SchelduerComponent: React.FC = () => {
 				<TodayButton />
 				<ViewSwitcher />
 				<Appointments />
-				<AppointmentTooltip
-					showCloseButton={true}
-					showDeleteButton={true}
-					showOpenButton={true}
-				/>
+				<AppointmentTooltip showCloseButton showDeleteButton showOpenButton />
 				<AppointmentForm />
 			</Scheduler>
 		</>
