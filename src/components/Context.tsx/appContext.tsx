@@ -1,16 +1,16 @@
-import React, { createContext, useState, useEffect, ReactNode } from "react";
-import { fetchAppointments } from "../utilities/firebaseService";
-
-interface AppointmentData {
-	id: string;
-	title: string;
-	startDate: Date;
-	endDate: Date;
-	location: string;
-}
+import React, {
+	createContext,
+	useState,
+	ReactNode,
+	Dispatch,
+	SetStateAction,
+} from "react";
+import { AppointmentData, Appointment } from "../../Types/types";
+import { useEffect } from "react";
 
 interface AppContextType {
-	appointments: AppointmentData[];
+	convertedData: Appointment[];
+	setAppointments: Dispatch<SetStateAction<AppointmentData[]>>;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -20,18 +20,27 @@ interface AppProviderProps {
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 	const [appointments, setAppointments] = useState<AppointmentData[]>([]);
+	const [convertedData, setConvertedData] = useState<Appointment[]>([]);
 
 	useEffect(() => {
-		const loadAppointments = async () => {
-			const dataApoimnts = await fetchAppointments();
-			setAppointments(dataApoimnts);
-		};
-
-		loadAppointments();
+		if (appointments.length >= 0) {
+			dataDecoder(appointments);
+		}
 	}, [appointments]);
 
+	const dataDecoder = (data: AppointmentData[]) => {
+		const converted = data.map(({ id, title, startDate, endDate, notes }) => ({
+			id,
+			title,
+			startDate: startDate.toDate(),
+			endDate: endDate.toDate(),
+			notes,
+		}));
+
+		setConvertedData(converted);
+	};
 	return (
-		<AppContext.Provider value={{ appointments }}>
+		<AppContext.Provider value={{ setAppointments, convertedData }}>
 			{children}
 		</AppContext.Provider>
 	);
