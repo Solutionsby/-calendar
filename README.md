@@ -1,50 +1,99 @@
-# React + TypeScript + Vite
+Scheduler App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Opis projektu
 
-Currently, two official plugins are available:
+Aplikacja Scheduler to aplikacja kalendarza oparta na React, która umożliwia zarządzanie wydarzeniami. Użytkownik może dodawać, edytować, usuwać wydarzenia oraz wyświetlać je w różnych widokach (dziennym, tygodniowym, miesięcznym). Aplikacja integruje się z Firebase Firestore, co pozwala na przechowywanie danych o wydarzeniach na serwerze.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Funkcje:
+Dodawanie wydarzeń: Możliwość tworzenia nowych wydarzeń z opcjami ustawienia tytułu, daty rozpoczęcia, zakończenia i dodatkowych informacji.
+Edytowanie wydarzeń: Użytkownik może edytować istniejące wydarzenia.
+Usuwanie wydarzeń: Możliwość usunięcia wydarzeń z kalendarza.
+Obsługa widoków: Wydarzenia mogą być wyświetlane w widoku dziennym, tygodniowym i miesięcznym.
+Polska lokalizacja: Aplikacja jest w pełni zlokalizowana na język polski.
+Firebase Firestore: Przechowywanie i synchronizacja danych w czasie rzeczywistym za pomocą Firebase.
+Technologie
 
-## Expanding the ESLint configuration
+React (Vite) - Framework frontendowy.
+TypeScript - Wykorzystanie TypeScript dla lepszej typizacji kodu.
+DevExtreme React Scheduler - Komponenty kalendarza dla React.
+Firebase Firestore - Baza danych NoSQL w chmurze.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Wymagania
 
-- Configure the top-level `parserOptions` property like this:
+Node.js - Wersja 14.x lub wyższa
+npm lub yarn - Menedżer pakietów
+Firebase - Konto Firebase z skonfigurowaną bazą danych Firestore i opcjonalnie Authentication.
+Instalacja
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Sklonuj repozytorium:
+bash
+Skopiuj kod
+git clone https://github.com/your-repo/scheduler-app.git
+Przejdź do katalogu projektu:
+bash
+Skopiuj kod
+cd scheduler-app
+Zainstaluj zależności:
+bash
+Skopiuj kod
+npm install
+Skonfiguruj Firebase:
+Utwórz projekt w Firebase Console.
+Skonfiguruj Firestore oraz opcjonalnie Firebase Authentication.
+Wygeneruj plik konfiguracyjny dla Firebase i umieść go w pliku .env:
+bash
+Skopiuj kod
+VITE_FIREBASE_API_KEY=your-api-key
+VITE_FIREBASE_AUTH_DOMAIN=your-auth-domain
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+VITE_FIREBASE_APP_ID=your-app-id
+Uruchom aplikację:
+bash
+Skopiuj kod
+npm run dev
+Aplikacja powinna być dostępna pod adresem http://localhost:3000.
+Użycie
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Dodawanie wydarzeń: Kliknij w przycisk „Dodaj wydarzenie” lub kliknij w wybrane miejsce w kalendarzu, aby dodać nowe wydarzenie.
+Edycja wydarzeń: Kliknij na istniejące wydarzenie, aby edytować jego szczegóły.
+Usuwanie wydarzeń: W formularzu edycji wydarzenia wybierz opcję „Usuń wydarzenie”.
+Zmiana widoku: Użyj przycisków przełączania widoków, aby zmieniać widok dzienny, tygodniowy i miesięczny.
+Firebase Reguły
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+Przykłady API Firebase
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+Dodawanie wydarzeń:
+typescript
+Skopiuj kod
+const addDataToFirestore = async (eventData) => {
+await addDoc(collection(firestore, 'events'), eventData);
+};
+Aktualizowanie wydarzeń:
+typescript
+Skopiuj kod
+const updateEventInFirestore = async (id, updatedData) => {
+await updateDoc(doc(firestore, 'events', id), updatedData);
+};
+Usuwanie wydarzeń:
+typescript
+Skopiuj kod
+const deleteEventFromFirestore = async (id) => {
+await deleteDoc(doc(firestore, 'events', id));
+};
+Struktura projektu
+
+bash
+Skopiuj kod
+scheduler-app/
+├── public/ # Pliki publiczne
+├── src/
+│ ├── components/ # Komponenty aplikacji
+│ ├── firebase/ # Konfiguracja Firebase
+│ ├── views/ # Widoki (DayView, WeekView, etc.)
+│ ├── App.tsx # Główna logika aplikacji
+│ └── index.tsx # Punkt wejścia aplikacji
+├── .env # Plik konfiguracyjny Firebase
+├── package.json # Lista zależności
+└── README.md # Dokumentacja
