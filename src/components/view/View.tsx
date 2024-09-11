@@ -31,7 +31,7 @@ export const ViewComponent: React.FC<ViewComponentProps> = ({
 	return (
 		<>
 			<Scheduler locale={"pl-PL"} height={600} data={convertedData}>
-				<ViewState defaultCurrentDate={today} defaultCurrentViewName="Week" />
+				<ViewState defaultCurrentDate={today} defaultCurrentViewName="Month" />
 				<EditingState onCommitChanges={handleSchedulerChange} />
 				<IntegratedEditing />
 				<DayView startDayHour={8} endDayHour={18} displayName="Dzień" />

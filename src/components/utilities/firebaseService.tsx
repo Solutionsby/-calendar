@@ -32,7 +32,6 @@ export const addDataToFirestore = async (
 	try {
 		const appointmentsCollection = collection(db, "appointments");
 		await addDoc(appointmentsCollection, data);
-		console.log("Nowe wydarzenie zostało dodane", data);
 		fetchAppointments(setter);
 	} catch (error) {
 		console.error("Błąd podczas dodawania wydarzenia: ", error);
@@ -47,7 +46,6 @@ export const deleteEventFromFirestore = async (
 		const dataRef = doc(db, "appointments", id);
 		console.log(id);
 		await deleteDoc(dataRef);
-		console.log(`Wydarzenie z id ${id} zostało usunięte.`);
 		fetchAppointments(setter);
 	} catch (error) {
 		console.error("Błąd podczas usuwania wydarzenia: ", error);
@@ -61,7 +59,6 @@ export const updateEventInFirestore = async (
 	try {
 		const dataRef = doc(db, "appointments", data.id);
 		await updateDoc(dataRef, { ...data });
-		console.log("Wydarzenie zostało zaktualizowane", data);
 		fetchAppointments(setter);
 	} catch (error) {
 		console.error("Błąd podczas aktualizacji wydarzenia: ", error);
