@@ -26,23 +26,30 @@ Firebase - Konto Firebase z skonfigurowaną bazą danych Firestore i opcjonalnie
 Instalacja
 
 Sklonuj repozytorium:
-bash
-Skopiuj kod
+
+```bash
+
 git clone https://github.com/your-repo/scheduler-app.git
 Przejdź do katalogu projektu:
-bash
-Skopiuj kod
+```
+
+```bash
 cd scheduler-app
+```
+
 Zainstaluj zależności:
-bash
-Skopiuj kod
+
+```bash
+
 npm install
 Skonfiguruj Firebase:
 Utwórz projekt w Firebase Console.
 Skonfiguruj Firestore oraz opcjonalnie Firebase Authentication.
 Wygeneruj plik konfiguracyjny dla Firebase i umieść go w pliku .env:
-bash
-Skopiuj kod
+```
+
+```bash
+
 VITE_FIREBASE_API_KEY=your-api-key
 VITE_FIREBASE_AUTH_DOMAIN=your-auth-domain
 VITE_FIREBASE_PROJECT_ID=your-project-id
@@ -50,11 +57,13 @@ VITE_FIREBASE_STORAGE_BUCKET=your-storage-bucket
 VITE_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
 VITE_FIREBASE_APP_ID=your-app-id
 Uruchom aplikację:
-bash
-Skopiuj kod
+```
+
+```bash
 npm run dev
 Aplikacja powinna być dostępna pod adresem http://localhost:3000.
 Użycie
+```
 
 Dodawanie wydarzeń: Kliknij w przycisk „Dodaj wydarzenie” lub kliknij w wybrane miejsce w kalendarzu, aby dodać nowe wydarzenie.
 Edycja wydarzeń: Kliknij na istniejące wydarzenie, aby edytować jego szczegóły.
@@ -62,38 +71,47 @@ Usuwanie wydarzeń: W formularzu edycji wydarzenia wybierz opcję „Usuń wydar
 Zmiana widoku: Użyj przycisków przełączania widoków, aby zmieniać widok dzienny, tygodniowy i miesięczny.
 Firebase Reguły
 
+````
 Przykłady API Firebase
-
 Dodawanie wydarzeń:
+```bash
 typescript
-Skopiuj kod
 const addDataToFirestore = async (eventData) => {
-await addDoc(collection(firestore, 'events'), eventData);
+  await addDoc(collection(firestore, 'events'), eventData);
 };
+````
+
 Aktualizowanie wydarzeń:
+
+```bash
 typescript
-Skopiuj kod
 const updateEventInFirestore = async (id, updatedData) => {
-await updateDoc(doc(firestore, 'events', id), updatedData);
+  await updateDoc(doc(firestore, 'events', id), updatedData);
 };
+```
+
 Usuwanie wydarzeń:
+
+```bash
 typescript
-Skopiuj kod
 const deleteEventFromFirestore = async (id) => {
-await deleteDoc(doc(firestore, 'events', id));
+  await deleteDoc(doc(firestore, 'events', id));
 };
+```
+
 Struktura projektu
 
-bash
+```bash
 Skopiuj kod
 scheduler-app/
-├── public/ # Pliki publiczne
+├── public/               # Pliki publiczne
 ├── src/
-│ ├── components/ # Komponenty aplikacji
-│ ├── firebase/ # Konfiguracja Firebase
-│ ├── views/ # Widoki (DayView, WeekView, etc.)
-│ ├── App.tsx # Główna logika aplikacji
-│ └── index.tsx # Punkt wejścia aplikacji
-├── .env # Plik konfiguracyjny Firebase
-├── package.json # Lista zależności
-└── README.md # Dokumentacja
+│   ├── components/       # Komponenty aplikacji
+│   ├── firebase/         # Konfiguracja Firebase
+│   ├── views/            # Widoki (DayView, WeekView, etc.)
+│   ├── App.tsx           # Główna logika aplikacji
+│   └── index.tsx         # Punkt wejścia aplikacji
+├── .env                  # Plik konfiguracyjny Firebase
+├── package.json          # Lista zależności
+└── README.md             # Dokumentacja
+```
