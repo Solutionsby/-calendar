@@ -66,14 +66,6 @@ Aplikacja powinna być dostępna pod adresem http://localhost:3000.
 Użycie
 ```
 
-## Dodawanie wydarzeń:
-
-Kliknij w przycisk „Dodaj wydarzenie” lub kliknij w wybrane miejsce w kalendarzu, aby dodać nowe wydarzenie.
-Edycja wydarzeń: Kliknij na istniejące wydarzenie, aby edytować jego szczegóły.
-Usuwanie wydarzeń: W formularzu edycji wydarzenia wybierz opcję „Usuń wydarzenie”.
-Zmiana widoku: Użyj przycisków przełączania widoków, aby zmieniać widok dzienny, tygodniowy i miesięczny.
-Firebase Reguły
-
 ## Przykłady API Firebase
 
 Dodawanie wydarzeń:
