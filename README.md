@@ -1,6 +1,6 @@
 Scheduler App
 
-Opis projektu
+## Opis projektu
 
 Aplikacja Scheduler to aplikacja kalendarza oparta na React, która umożliwia zarządzanie wydarzeniami. Użytkownik może dodawać, edytować, usuwać wydarzenia oraz wyświetlać je w różnych widokach (dziennym, tygodniowym, miesięcznym). Aplikacja integruje się z Firebase Firestore, co pozwala na przechowywanie danych o wydarzeniach na serwerze.
 
@@ -18,7 +18,7 @@ TypeScript - Wykorzystanie TypeScript dla lepszej typizacji kodu.
 DevExtreme React Scheduler - Komponenty kalendarza dla React.
 Firebase Firestore - Baza danych NoSQL w chmurze.
 
-Wymagania
+## Wymagania
 
 Node.js - Wersja 14.x lub wyższa
 npm lub yarn - Menedżer pakietów
@@ -30,14 +30,15 @@ Sklonuj repozytorium:
 ```bash
 
 git clone https://github.com/your-repo/scheduler-app.git
-Przejdź do katalogu projektu:
 ```
+
+Przejdź do katalogu projektu:
 
 ```bash
 cd scheduler-app
 ```
 
-Zainstaluj zależności:
+## Zainstaluj zależności:
 
 ```bash
 
@@ -65,21 +66,25 @@ Aplikacja powinna być dostępna pod adresem http://localhost:3000.
 Użycie
 ```
 
-Dodawanie wydarzeń: Kliknij w przycisk „Dodaj wydarzenie” lub kliknij w wybrane miejsce w kalendarzu, aby dodać nowe wydarzenie.
+## Dodawanie wydarzeń:
+
+Kliknij w przycisk „Dodaj wydarzenie” lub kliknij w wybrane miejsce w kalendarzu, aby dodać nowe wydarzenie.
 Edycja wydarzeń: Kliknij na istniejące wydarzenie, aby edytować jego szczegóły.
 Usuwanie wydarzeń: W formularzu edycji wydarzenia wybierz opcję „Usuń wydarzenie”.
 Zmiana widoku: Użyj przycisków przełączania widoków, aby zmieniać widok dzienny, tygodniowy i miesięczny.
 Firebase Reguły
 
-````
-Przykłady API Firebase
+## Przykłady API Firebase
+
 Dodawanie wydarzeń:
+
 ```bash
 typescript
 const addDataToFirestore = async (eventData) => {
   await addDoc(collection(firestore, 'events'), eventData);
 };
-````
+
+```
 
 Aktualizowanie wydarzeń:
 
@@ -99,7 +104,7 @@ const deleteEventFromFirestore = async (id) => {
 };
 ```
 
-Struktura projektu
+## Struktura projektu
 
 ```bash
 Skopiuj kod
